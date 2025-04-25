@@ -11,6 +11,11 @@ const float BASE_HEIGHT = 4.0;
 const float BASE_ZOOM = 0.5;
 
 // ENUM CLASS (STATE) - CALC, DISPLAY
+enum class State
+{
+	CALCULATING = 0,
+	DISPLAYING = 1;
+};
 
 class ComplexPlane : public Drawable
 {
@@ -24,13 +29,11 @@ public: // -- CHECK
 	void setMouseLocation(Vector2i mousPixel);
 	void loadText(Text& text);
 	
-	// CHECK RIGHT LOCTION? IN PRIVATE?
+private: // -- CHECK
 	size_t countIterations(Vector2f coord);
 	void iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b);
 	Vector2f mapPixelToCoords(Vector2i mousePixel);
 
-private: 
-	// -- CHECK
 	VertexArray m_va;
 	State m_state;
 	Vector2f m_mouseLocation;

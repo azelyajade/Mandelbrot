@@ -11,6 +11,7 @@ ComplexPlane::ComplexPlane(int pixelWidth, int pixelHeight) {
 	VertexArray m_va; // IS VertexArray NEEDED?
 	m_va.setPrimitiveType(Points);
 	m_va.resize(pixelWidth * pixelHeight);
+	m_state = State::DISPLAYING;
 }
 
 void ComplexPlane::draw(RenderTarget& target, RenderStates states) const {
@@ -18,7 +19,26 @@ void ComplexPlane::draw(RenderTarget& target, RenderStates states) const {
 }
 
 void ComplexPlane::updateRender() {
-	// TO DO
+	void ComplexPlane::updateRender() {
+	if (m_state == State::CALCULATING) {
+		for (int i = 0; i < pixelHeight; i++) {
+			for (int j = 0; j < pixelWidth; j++) {
+
+				Uint8 r, g, b;
+				r = rand() % 256;
+				g = rand() % 256;
+				b = rand() % 256;
+
+				m_va[j + i * pixelWidth].position = { (float)j,(float)i };
+				m_va[j + i * pixelWidth].color = { r,g,b };
+
+				m_pixel_size = mapPixelToCoords()
+				countIterations(mapPixelToCoords())
+			}
+		}
+		m_state = State::DISPLAYING;
+	}
+}
 }
 
 void ComplexPlane::zoomIn() {

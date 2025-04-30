@@ -11,8 +11,11 @@ int main()
 
 {
 
-	int pixelWidth = VideoMode::getDesktopMode().width;
-	int pixelHeight = VideoMode::getDesktopMode().height;
+	int pixelWidth = VideoMode::getDesktopMode().width / 2;
+	int pixelHeight = VideoMode::getDesktopMode().height / 2;
+
+	/*int pixelWidth = 1920;
+	int pixelHeight = 1080;*/
 
 	VideoMode vm(pixelWidth, pixelHeight);
 
@@ -58,23 +61,19 @@ int main()
 				// Zoom in or out based on what button was clicked
 				if (event.mouseButton.button == sf::Mouse::Left)
 				{
-					std::cout << "the left button was pressed" << std::endl;
-
 					plane.zoomIn();
 				}
 				if (event.mouseButton.button == sf::Mouse::Right)
 				{
-					std::cout << "the right button was pressed" << std::endl;
-
 					plane.zoomOut();
 				}
 			}
 
-			//if (event.type == Event::MouseMoved) // event::mouse moved
-			//{
-			//	Vector2i location(event.mouseMove.x, event.mouseMove.y);
-			//	plane.setMouseLocation(location);
-			//}
+			if (event.type == Event::MouseMoved) // event::mouse moved
+			{
+				Vector2i location(event.mouseMove.x, event.mouseMove.y);
+				plane.setMouseLocation(location);
+			}
 
 			if (Keyboard::isKeyPressed(Keyboard::Escape))
 			{
@@ -102,7 +101,7 @@ int main()
 						DRAW
 		****************************************
 		*/
-		
+
 		plane.draw(window, rStates);
 		window.draw(text);
 

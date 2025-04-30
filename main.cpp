@@ -1,7 +1,6 @@
-// C++ libraries
 #include <SFML/Graphics.hpp>
-#include "ComplexPlane.h"
 #include <iostream>
+#include "ComplexPlane.h"
 
 
 using namespace sf;
@@ -32,7 +31,6 @@ int main()
 	}
 
 	// Text
-
 	Text text;
 	text.setFont(font);
 	text.setCharacterSize(50);
@@ -41,12 +39,12 @@ int main()
 	while (window.isOpen())
 
 	{
-
 		/*
 		****************************************
 						INPUT
 		****************************************
 		*/
+
 		Event event;
 		while (window.pollEvent(event))
 		{
@@ -72,23 +70,20 @@ int main()
 				}
 			}
 
-			if (event.type == Event::MouseMoved) // event::mouse moved
-			{
-				Vector2i location(event.mouseMove.x, event.mouseMove.y);
-				plane.setMouseLocation(location);
-			}
-
+			//if (event.type == Event::MouseMoved) // event::mouse moved
+			//{
+			//	Vector2i location(event.mouseMove.x, event.mouseMove.y);
+			//	plane.setMouseLocation(location);
+			//}
 
 			if (Keyboard::isKeyPressed(Keyboard::Escape))
 			{
 				window.close();
 			}
 
-			// event::closed
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
-		// END of INPUT
 
 
 		/*
@@ -96,27 +91,20 @@ int main()
 						UPDATE
 		****************************************
 		*/
-		// updateRender
+
 		plane.updateRender();
-		// loadText
 		plane.loadText(text);
 
-		// END of UPDATE
-
 		window.clear();
-
 
 		/*
 		****************************************
 						DRAW
 		****************************************
 		*/
-		// 
+		
 		plane.draw(window, rStates);
 		window.draw(text);
-		// 
-		// END of DRAW
-
 
 		window.display();
 

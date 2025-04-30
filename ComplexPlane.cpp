@@ -19,26 +19,32 @@ void ComplexPlane::draw(RenderTarget& target, RenderStates states) const {
 }
 
 void ComplexPlane::updateRender() {
-	void ComplexPlane::updateRender() {
 	if (m_state == State::CALCULATING) {
 		for (int i = 0; i < pixelHeight; i++) {
-			for (int j = 0; j < pixelWidth; j++) {
+			for (int j = 0; j < pixelWidth; j++) { // double loop
 
-				Uint8 r, g, b;
-				r = rand() % 256;
-				g = rand() % 256;
-				b = rand() % 256;
-
+				// set postion
 				m_va[j + i * pixelWidth].position = { (float)j,(float)i };
+				
+				// find vector coord
+				Vector2f coord = mapPixelToCoords(j, i);
+
+				// store iterations
+				size_t iterations = countIterations(coord);
+
+				// RGB values
+				Uint8 r, g, b;
+
+				// pass iterations into RGB
+				iterationsToRGB(iterations, r, g, b);
+
+				// set color
 				m_va[j + i * pixelWidth].color = { r,g,b };
 
-				m_pixel_size = mapPixelToCoords()
-				countIterations(mapPixelToCoords())
 			}
 		}
 		m_state = State::DISPLAYING;
 	}
-}
 }
 
 void ComplexPlane::zoomIn() {
@@ -58,15 +64,31 @@ void ComplexPlane::zoomOut() {
 }
 
 void ComplexPlane::setCenter(Vector2i mousePixel) {
+	Vector2f coord = mapPixelToCoords(mousePixel);
+	m_plane_center = coord;
+	m_state = State::CALCULATING;
+}
+void ComplexPlane::setMouseLocation(Vector2i mousePixel) {
+	m_mouseLocation = mapPixelToCoords(mousePixel);
+}
+void ComplexPlane::loadText(Text& text); // TO DO
 
-}
-void ComplexPlane::setMouseLocation(Vector2i mousPixel) {
-	// !!! TO DO
-}
-void ComplexPlane::loadText(Text& text);
 // PRIVATE FUNCTIONS
-size_t ComplexPlane::countIterations(Vector2f coord);
-void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b);
+size_t ComplexPlane::countIterations(Vector2f coord) {
+	size_t iterations = 0;
+
+	complex<double> z = 0;
+	complex<double> c(coord.x, coord.y);
+
+	while(abs(z) < 2.0 && iterations < MAX_ITER) {
+		z = z * z + c;
+		iterations++;
+	}
+
+	return iterations;
+}
+
+void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
 
 Vector2f ComplexPlane::mapPixelToCoords(Vector2i mousePixel) {
 	// !!! TO DO

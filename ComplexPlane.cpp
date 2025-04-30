@@ -18,6 +18,7 @@ ComplexPlane::ComplexPlane(int pixelWidth, int pixelHeight) {
 	VertexArray m_va; // IS VertexArray NEEDED?
 	m_va.setPrimitiveType(Points);
 	m_va.resize(pixelWidth * pixelHeight);
+	m_state = State::DISPLAYING;
 }
 
 void ComplexPlane::draw(RenderTarget& target, RenderStates states) const {
@@ -25,7 +26,32 @@ void ComplexPlane::draw(RenderTarget& target, RenderStates states) const {
 }
 
 void ComplexPlane::updateRender() {
-	// TO DO
+	if (m_state == State::CALCULATING) {
+		for (int i = 0; i < pixelHeight; i++) {
+			for (int j = 0; j < pixelWidth; j++) { // double loop
+
+				// set postion
+				m_va[j + i * pixelWidth].position = { (float)j,(float)i };
+				
+				// find vector coord
+				Vector2f coord = mapPixelToCoords(j, i);
+
+				// store iterations
+				size_t iterations = countIterations(coord);
+
+				// RGB values
+				Uint8 r, g, b;
+
+				// pass iterations into RGB
+				iterationsToRGB(iterations, r, g, b);
+
+				// set color
+				m_va[j + i * pixelWidth].color = { r,g,b };
+
+			}
+		}
+		m_state = State::DISPLAYING;
+	}
 }
 
 void ComplexPlane::zoomIn() {
@@ -45,11 +71,14 @@ void ComplexPlane::zoomOut() {
 }
 
 void ComplexPlane::setCenter(Vector2i mousePixel) {
-
+	Vector2f coord = mapPixelToCoords(mousePixel);
+	m_plane_center = coord;
+	m_state = State::CALCULATING;
 }
 void ComplexPlane::setMouseLocation(Vector2i mousePixel) {
-	// !!! TO DO
+  	m_mouseLocation = mapPixelToCoords(mousePixel);
 }
+
 void ComplexPlane::loadText(Text& text)
 {
 	stringstream windowInfo("Mandlebrot Set\n");
@@ -58,22 +87,6 @@ void ComplexPlane::loadText(Text& text)
 		<< "Left-click to Zoom in\n"
 		<< "Right-click to Zoom out\n";
 	text.setString(windowInfo.str());
-};
-// PRIVATE FUNCTIONS
-size_t ComplexPlane::countIterations(Vector2f coord)
-{
-	complex<double> c(coord.x, coord.y);
-	complex<double> z = c;
-
-	int i = 0;
-	while (abs(z) < 2.0 && i < MAX_ITER)
-	{
-		z = z * z + c;
-		i++;
-	}
-
-	return i;
-
 };
 
 void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
@@ -140,6 +153,21 @@ void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
 	b = bPrime + m;
 
 };
+
+// PRIVATE FUNCTIONS
+size_t ComplexPlane::countIterations(Vector2f coord) {
+	size_t iterations = 0;
+
+	complex<double> z = 0;
+	complex<double> c(coord.x, coord.y);
+
+	while(abs(z) < 2.0 && iterations < MAX_ITER) {
+		z = z * z + c;
+		iterations++;
+	}
+
+	return iterations;
+}
 
 Vector2f ComplexPlane::mapPixelToCoords(Vector2i mousePixel) {
 	// !!! TO DO

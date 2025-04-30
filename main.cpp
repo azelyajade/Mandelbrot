@@ -26,16 +26,16 @@ int main()
 	// Font
 	Font font;
 
-	if (!font.loadFromFile("./Fonts/BLACCS_.ttf"))
+	if (!font.loadFromFile("./Fonts/BLACCS__.TTF"))
 	{
-		cout << "Uh oh" << endl;
+		return EXIT_FAILURE;
 	}
 
 	// Text
 
 	Text text;
 	text.setFont(font);
-	text.setCharacterSize(10);
+	text.setCharacterSize(50);
 	text.setStyle(Text::Regular);
 
 	while (window.isOpen())
@@ -54,7 +54,7 @@ int main()
 			if (event.type == sf::Event::MouseButtonPressed)
 			{
 				// Gets mouse location and sets the center
-				Vector2i location(event.mouseButton.x, event.mouseButton.y);
+				Vector2i location(event.mouseButton.x, event.mouseButton.y); // event::mouse pressed
 				plane.setCenter(location);
 
 				// Zoom in or out based on what button was clicked
@@ -71,22 +71,23 @@ int main()
 					plane.zoomOut();
 				}
 			}
-			if (event.type == Event::MouseMoved)
+
+			if (event.type == Event::MouseMoved) // event::mouse moved
 			{
 				Vector2i location(event.mouseMove.x, event.mouseMove.y);
 				plane.setMouseLocation(location);
 			}
+
+
+			if (Keyboard::isKeyPressed(Keyboard::Escape))
+			{
+				window.close();
+			}
+
+			// event::closed
+			if (event.type == sf::Event::Closed)
+				window.close();
 		}
-
-		if (Keyboard::isKeyPressed(Keyboard::Escape))
-		{
-			window.close();
-		}
-
-		// event::closed
-		// event::mouse pressed
-		// event::mouse moved
-
 		// END of INPUT
 
 

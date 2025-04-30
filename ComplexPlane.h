@@ -2,10 +2,15 @@
 // **lowercase: done
 
 // HEADER STUFF
+#pragma once
+#include <SFML/Graphics.hpp>
 
+using namespace sf;
+using namespace std;
 
 // constant values
 const unsigned int MAX_ITER = 64;
+const int COLOR_DIVISIONS = 4;
 const float BASE_WIDTH = 4.0;
 const float BASE_HEIGHT = 4.0;
 const float BASE_ZOOM = 0.5;
@@ -14,7 +19,7 @@ const float BASE_ZOOM = 0.5;
 enum class State
 {
 	CALCULATING = 0,
-	DISPLAYING = 1;
+	DISPLAYING = 1
 };
 
 class ComplexPlane : public Drawable

@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <thread>
 #include <iostream>
 #include "ComplexPlane.h"
 
